@@ -1,33 +1,36 @@
 package com.shimmer.spring.bean;
 
-import com.shimmer.spring.ioc.container.overview.domain.User;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import com.shimmer.spring.factory.DefaultUserFactory;
+import com.shimmer.spring.factory.UserFactory;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 
-/**
- * @author aurora
- * @date 2020/6/20 23:00
- */
+@Configuration // Configuration Class
 public class BeanInitializationDemo {
 
     public static void main(String[] args) {
+        // 创建 BeanFactory 容器
+        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
+        // 注册 Configuration Class（配置类）
+        applicationContext.register(BeanInitializationDemo.class);
+        // 启动 Spring 应用上下文
+        applicationContext.refresh();
+        // 非延迟初始化在 Spring 应用上下文启动完成后，被初始化
+        System.out.println("Spring 应用上下文已启动...");
+        // 依赖查找 UserFactory
+        UserFactory userFactory = applicationContext.getBean(UserFactory.class);
+        System.out.println(userFactory);
+        System.out.println("Spring 应用上下文准备关闭...");
+        // 关闭 Spring 应用上下文
+        applicationContext.close();
+        System.out.println("Spring 应用上下文已关闭...");
+    }
 
-        BeanFactory beanFactory = new ClassPathXmlApplicationContext("classpath:/META-INF/bean-initialization-context.xml");
-
-        User constructUser = beanFactory.getBean("user-by-construct", User.class);
-        System.out.println("构造器注入的user:" + constructUser);
-
-        User staticUser = beanFactory.getBean("user-by-static-method", User.class);
-        System.out.println("静态方法注入的user:" + staticUser);
-
-        User instanceUser = beanFactory.getBean("user-by-instance-method", User.class);
-        System.out.println("实例化方法注入的user:" + instanceUser);
-
-        User factoryUser = beanFactory.getBean("user-by-factory-bean", User.class);
-        System.out.println("FactoryBean注入的user:" + factoryUser);
-
-        System.out.println(staticUser == constructUser);
-        System.out.println(staticUser == instanceUser);
-        System.out.println(instanceUser == factoryUser);
+    @Bean(initMethod = "initUserFactory", destroyMethod = "doDestroy")
+    @Lazy(value = false)
+    public UserFactory userFactory() {
+        return new DefaultUserFactory();
     }
 }
