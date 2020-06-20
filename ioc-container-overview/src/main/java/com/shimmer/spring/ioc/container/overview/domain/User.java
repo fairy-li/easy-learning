@@ -5,6 +5,13 @@ public class User {
     private int id;
     private String name;
 
+    public static User createUser() {
+        User user  =new User();
+        user.setId(11);
+        user.setName("wanger");
+        return user;
+    }
+
     public int getId() {
         return id;
     }
@@ -18,6 +25,14 @@ public class User {
     }
 
     public void setName(String name) {
+        this.name = name;
+    }
+
+    public User() {
+    }
+
+    public User(int id, String name) {
+        this.id = id;
         this.name = name;
     }
 
