@@ -33,7 +33,7 @@ public class SpecialBeanInitializationDemo {
         System.out.println(userFactory.createUser());
     }
 
-    private static void deServiceLoader() {
+    private static void demoServiceLoader() {
         ServiceLoader<UserFactory> loader = load(UserFactory.class, Thread.currentThread().getContextClassLoader());
         displayServiceLoader(loader);
     }
