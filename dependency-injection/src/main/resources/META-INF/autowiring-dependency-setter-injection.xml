@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <import resource="dependency-lookup-context.xml"/>
+
+    <!--setter autowiring注入-->
+    <bean id="userHolder2" class="com.shimmer.spring.dependency.injection.domain.UserHolder" autowire="byName">
+    </bean>
+
+    <!--construct autowiring注入-->
+    <bean id="userHolder3" class="com.shimmer.spring.dependency.injection.domain.UserHolder" autowire="constructor">
+    </bean>
+
+    <!--setter注入-->
+    <bean id="userHolder" class="com.shimmer.spring.dependency.injection.domain.UserHolder">
+        <property name="user" ref="user"></property>
+    </bean>
+
+    <!--construct注入-->
+    <bean id="userHolder4" class="com.shimmer.spring.dependency.injection.domain.UserHolder" primary="true">
+        <constructor-arg name="user" ref="superUser"/>
+    </bean>
+</beans>
